@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище FASModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="FAS_Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RFID" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="IsActiv" Type="bit" Nullable="false" />
+          <Property Name="UsersGroupID" Type="tinyint" Nullable="false" />
+          <Property Name="IDService" Type="int" />
+        </EntityType>
+        <EntityType Name="M_CadenaID">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="TRID" Type="nvarchar" MaxLength="14" Nullable="false" />
+          <Property Name="IsUsed" Type="bit" Nullable="false" />
+          <Property Name="LOTID" Type="int" />
+          <Property Name="IsPacked" Type="bit" />
+          <Property Name="Liter" Type="nvarchar" MaxLength="5" />
+          <Property Name="PalletNumber" Type="int" />
+          <Property Name="BoxNumber" Type="int" />
+          <Property Name="UnitNumber" Type="smallint" />
+          <Property Name="PackDate" Type="datetime" />
+          <Property Name="LabelDate" Type="date" />
+          <Property Name="PrintStationID" Type="smallint" />
+          <Property Name="Weight" Type="smallint" />
+          <Property Name="IsWeight" Type="bit" />
+          <Property Name="PrintBy" Type="smallint" />
+          <Property Name="IsReprinted" Type="bit" />
+          <Property Name="OldDateLabel" Type="date" />
+          <Property Name="LangPO" Type="nvarchar" MaxLength="50" />
+          <Property Name="Verify" Type="bit" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="DateVerify" Type="datetime" />
+          <Property Name="Repack" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="M_LOT_Cadena">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LOTCode" Type="int" />
+          <Property Name="ModelID" Type="int" Nullable="false" />
+          <Property Name="FullLOTCode" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="LiterIndex" Type="int" Nullable="false" />
+          <Property Name="BoxCapacity" Type="int" Nullable="false" />
+          <Property Name="PalletCapacity" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="isActiv" Type="bit" />
+        </EntityType>
+        <EntityType Name="M_Models">
+          <Key>
+            <PropertyRef Name="ModelID" />
+          </Key>
+          <Property Name="ModelID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ModelName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="M_Packing_Cadena">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TRIDShort" Type="int" Nullable="false" />
+          <Property Name="PalletNum" Type="int" Nullable="false" />
+          <Property Name="BoxNum" Type="int" Nullable="false" />
+          <Property Name="UnitNum" Type="int" Nullable="false" />
+          <Property Name="LineID" Type="int" Nullable="false" />
+          <Property Name="Liter" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LOTID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="PackingDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_M_CadenaID_M_LOT_Cadena">
+          <End Role="M_LOT_Cadena" Type="Self.M_LOT_Cadena" Multiplicity="0..1" />
+          <End Role="M_CadenaID" Type="Self.M_CadenaID" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_LOT_Cadena">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_CadenaID">
+              <PropertyRef Name="LOTID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_LOT_Cadena_M_Models">
+          <End Role="M_Models" Type="Self.M_Models" Multiplicity="1" />
+          <End Role="M_LOT_Cadena" Type="Self.M_LOT_Cadena" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_Models">
+              <PropertyRef Name="ModelID" />
+            </Principal>
+            <Dependent Role="M_LOT_Cadena">
+              <PropertyRef Name="ModelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище FASModelContainer">
+          <EntitySet Name="FAS_Users" EntityType="Self.FAS_Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_CadenaID" EntityType="Self.M_CadenaID" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_LOT_Cadena" EntityType="Self.M_LOT_Cadena" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_Models" EntityType="Self.M_Models" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_Packing_Cadena" EntityType="Self.M_Packing_Cadena" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_M_CadenaID_M_LOT_Cadena" Association="Self.FK_M_CadenaID_M_LOT_Cadena">
+            <End Role="M_LOT_Cadena" EntitySet="M_LOT_Cadena" />
+            <End Role="M_CadenaID" EntitySet="M_CadenaID" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_LOT_Cadena_M_Models" Association="Self.FK_M_LOT_Cadena_M_Models">
+            <End Role="M_Models" EntitySet="M_Models" />
+            <End Role="M_LOT_Cadena" EntitySet="M_LOT_Cadena" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FASModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="M_LOT_Cadena">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LOTCode" Type="Int32" />
+          <Property Name="ModelID" Type="Int32" Nullable="false" />
+          <Property Name="FullLOTCode" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LiterIndex" Type="Int32" Nullable="false" />
+          <Property Name="BoxCapacity" Type="Int32" Nullable="false" />
+          <Property Name="PalletCapacity" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="isActiv" Type="Boolean" />
+          <NavigationProperty Name="M_CadenaID" Relationship="FASModel.FK_M_CadenaID_M_LOT_Cadena" FromRole="M_LOT_Cadena" ToRole="M_CadenaID" />
+          <NavigationProperty Name="M_Models" Relationship="FASModel.FK_M_LOT_Cadena_M_Models" FromRole="M_LOT_Cadena" ToRole="M_Models" />
+        </EntityType>
+        <EntityType Name="M_Packing_Cadena">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TRIDShort" Type="Int32" Nullable="false" />
+          <Property Name="PalletNum" Type="Int32" Nullable="false" />
+          <Property Name="BoxNum" Type="Int32" Nullable="false" />
+          <Property Name="UnitNum" Type="Int32" Nullable="false" />
+          <Property Name="LineID" Type="Int32" Nullable="false" />
+          <Property Name="Liter" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LOTID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="PackingDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityContainer Name="FASEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="M_LOT_Cadena" EntityType="Self.M_LOT_Cadena" />
+          <EntitySet Name="M_Packing_Cadena" EntityType="Self.M_Packing_Cadena" />
+          <EntitySet Name="M_CadenaID" EntityType="FASModel.M_CadenaID" />
+          <AssociationSet Name="FK_M_CadenaID_M_LOT_Cadena" Association="FASModel.FK_M_CadenaID_M_LOT_Cadena">
+            <End Role="M_LOT_Cadena" EntitySet="M_LOT_Cadena" />
+            <End Role="M_CadenaID" EntitySet="M_CadenaID" />
+          </AssociationSet>
+          <EntitySet Name="M_Models" EntityType="FASModel.M_Models" />
+          <AssociationSet Name="FK_M_LOT_Cadena_M_Models" Association="FASModel.FK_M_LOT_Cadena_M_Models">
+            <End Role="M_Models" EntitySet="M_Models" />
+            <End Role="M_LOT_Cadena" EntitySet="M_LOT_Cadena" />
+          </AssociationSet>
+          <EntitySet Name="FAS_Users" EntityType="FASModel.FAS_Users" />
+        </EntityContainer>
+        <EntityType Name="M_CadenaID">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="TRID" Type="String" Nullable="false" MaxLength="14" FixedLength="false" Unicode="true" />
+          <Property Name="IsUsed" Type="Boolean" Nullable="false" />
+          <Property Name="LOTID" Type="Int32" />
+          <Property Name="IsPacked" Type="Boolean" />
+          <Property Name="Liter" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="PalletNumber" Type="Int32" />
+          <Property Name="BoxNumber" Type="Int32" />
+          <Property Name="UnitNumber" Type="Int16" />
+          <Property Name="PackDate" Type="DateTime" Precision="3" />
+          <Property Name="LabelDate" Type="DateTime" Precision="0" />
+          <Property Name="PrintStationID" Type="Int16" />
+          <Property Name="Weight" Type="Int16" />
+          <Property Name="IsWeight" Type="Boolean" />
+          <Property Name="PrintBy" Type="Int16" />
+          <Property Name="IsReprinted" Type="Boolean" />
+          <Property Name="OldDateLabel" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="M_LOT_Cadena" Relationship="FASModel.FK_M_CadenaID_M_LOT_Cadena" FromRole="M_CadenaID" ToRole="M_LOT_Cadena" />
+          <Property Name="LangPO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Verify" Type="Boolean" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="DateVerify" Type="DateTime" Precision="3" />
+          <Property Name="Repack" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_M_CadenaID_M_LOT_Cadena">
+          <End Type="FASModel.M_LOT_Cadena" Role="M_LOT_Cadena" Multiplicity="0..1" />
+          <End Type="FASModel.M_CadenaID" Role="M_CadenaID" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_LOT_Cadena">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_CadenaID">
+              <PropertyRef Name="LOTID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="M_Models">
+          <Key>
+            <PropertyRef Name="ModelID" />
+          </Key>
+          <Property Name="ModelID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ModelName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="M_LOT_Cadena" Relationship="FASModel.FK_M_LOT_Cadena_M_Models" FromRole="M_Models" ToRole="M_LOT_Cadena" />
+        </EntityType>
+        <Association Name="FK_M_LOT_Cadena_M_Models">
+          <End Type="FASModel.M_Models" Role="M_Models" Multiplicity="1" />
+          <End Type="FASModel.M_LOT_Cadena" Role="M_LOT_Cadena" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_Models">
+              <PropertyRef Name="ModelID" />
+            </Principal>
+            <Dependent Role="M_LOT_Cadena">
+              <PropertyRef Name="ModelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FAS_Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RFID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsActiv" Type="Boolean" Nullable="false" />
+          <Property Name="UsersGroupID" Type="Byte" Nullable="false" />
+          <Property Name="IDService" Type="Int32" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище FASModelContainer" CdmEntityContainer="FASEntities">
+          <EntitySetMapping Name="M_LOT_Cadena">
+            <EntityTypeMapping TypeName="FASModel.M_LOT_Cadena">
+              <MappingFragment StoreEntitySet="M_LOT_Cadena">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="LOTCode" ColumnName="LOTCode" />
+                <ScalarProperty Name="ModelID" ColumnName="ModelID" />
+                <ScalarProperty Name="FullLOTCode" ColumnName="FullLOTCode" />
+                <ScalarProperty Name="LiterIndex" ColumnName="LiterIndex" />
+                <ScalarProperty Name="BoxCapacity" ColumnName="BoxCapacity" />
+                <ScalarProperty Name="PalletCapacity" ColumnName="PalletCapacity" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="isActiv" ColumnName="isActiv" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_Packing_Cadena">
+            <EntityTypeMapping TypeName="FASModel.M_Packing_Cadena">
+              <MappingFragment StoreEntitySet="M_Packing_Cadena">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TRIDShort" ColumnName="TRIDShort" />
+                <ScalarProperty Name="PalletNum" ColumnName="PalletNum" />
+                <ScalarProperty Name="BoxNum" ColumnName="BoxNum" />
+                <ScalarProperty Name="UnitNum" ColumnName="UnitNum" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="Liter" ColumnName="Liter" />
+                <ScalarProperty Name="LOTID" ColumnName="LOTID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="PackingDate" ColumnName="PackingDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_CadenaID">
+            <EntityTypeMapping TypeName="FASModel.M_CadenaID">
+              <MappingFragment StoreEntitySet="M_CadenaID">
+                <ScalarProperty Name="Repack" ColumnName="Repack" />
+                <ScalarProperty Name="DateVerify" ColumnName="DateVerify" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Verify" ColumnName="Verify" />
+                <ScalarProperty Name="LangPO" ColumnName="LangPO" />
+                <ScalarProperty Name="OldDateLabel" ColumnName="OldDateLabel" />
+                <ScalarProperty Name="IsReprinted" ColumnName="IsReprinted" />
+                <ScalarProperty Name="PrintBy" ColumnName="PrintBy" />
+                <ScalarProperty Name="IsWeight" ColumnName="IsWeight" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="PrintStationID" ColumnName="PrintStationID" />
+                <ScalarProperty Name="LabelDate" ColumnName="LabelDate" />
+                <ScalarProperty Name="PackDate" ColumnName="PackDate" />
+                <ScalarProperty Name="UnitNumber" ColumnName="UnitNumber" />
+                <ScalarProperty Name="BoxNumber" ColumnName="BoxNumber" />
+                <ScalarProperty Name="PalletNumber" ColumnName="PalletNumber" />
+                <ScalarProperty Name="Liter" ColumnName="Liter" />
+                <ScalarProperty Name="IsPacked" ColumnName="IsPacked" />
+                <ScalarProperty Name="LOTID" ColumnName="LOTID" />
+                <ScalarProperty Name="IsUsed" ColumnName="IsUsed" />
+                <ScalarProperty Name="TRID" ColumnName="TRID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_Models">
+            <EntityTypeMapping TypeName="FASModel.M_Models">
+              <MappingFragment StoreEntitySet="M_Models">
+                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+                <ScalarProperty Name="ModelID" ColumnName="ModelID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FAS_Users">
+            <EntityTypeMapping TypeName="FASModel.FAS_Users">
+              <MappingFragment StoreEntitySet="FAS_Users">
+                <ScalarProperty Name="IDService" ColumnName="IDService" />
+                <ScalarProperty Name="UsersGroupID" ColumnName="UsersGroupID" />
+                <ScalarProperty Name="IsActiv" ColumnName="IsActiv" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="RFID" ColumnName="RFID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
